@@ -139,14 +139,14 @@ type RunnerResult = {
     model: BattleModelId;
     label: string;
     color: string;
-    type: 'consensus' | 'single_agent' | 'baseline';
+    type?: 'consensus' | 'single_agent' | 'baseline';
     action: BattleAnswer;                // per_runner_response.action
     confidence: number;
     target_exposure_pct: number;         // 0..1
     rationale: string;
-    latencyS: number;                    // latency_s
-    tokensPrompt: number;
-    tokensCompletion: number;
+    latencyS?: number;                    // latency_s
+    tokensPrompt?: number;
+    tokensCompletion?: number;
     simulated_return_pct: number;        // already includes fees + slippage, shown as %
     correct: boolean;
     trace?: ConsensusTrace;
@@ -890,6 +890,7 @@ const BattleModal: React.FC<{ c: BattleCase; onClose: () => void }> = ({ c, onCl
                             <div className={`grid gap-3 ${selectedArr.length === 2 ? 'grid-cols-1 md:grid-cols-2' : selectedArr.length === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-2 md:grid-cols-4'}`}>
                                 {selectedArr.map((m) => {
                                     const r = c.runners[m];
+                                    if (!r) return null;
                                     const isShown = revealed.has(m);
                                     const aStyle = answerStyle[r.action];
                                     const stance = r.action === 'buy' ? 'Bullish call' : r.action === 'sell' ? 'Bearish call' : 'Stay on sidelines';
