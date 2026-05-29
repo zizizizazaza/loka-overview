@@ -160,7 +160,7 @@ type BattleCase = {
     asOf: string;
     question: string;
     windowDays: number;
-    difficulty: Difficulty;
+    difficulty?: Difficulty;
     inputs: {
         price: number;
         priceUnit: string;
@@ -1009,6 +1009,7 @@ const BattleModal: React.FC<{ c: BattleCase; onClose: () => void }> = ({ c, onCl
                                     <div className="rounded-xl border bg-white overflow-hidden" style={{ borderColor: LINE }}>
                                         {sortedByPL.map((m, idx) => {
                                             const r = c.runners[m];
+                                            if (!r) return null;
                                             const pos = r.simulated_return_pct > 0;
                                             const neg = r.simulated_return_pct < 0;
                                             const wPct = (Math.abs(r.simulated_return_pct) / maxAbsPL) * 100;
@@ -1057,6 +1058,7 @@ const BattleModal: React.FC<{ c: BattleCase; onClose: () => void }> = ({ c, onCl
                                     <div className="px-5 pb-5 pt-1 space-y-3">
                                         {selectedArr.map((m) => {
                                             const r = c.runners[m];
+                                            if (!r) return null;
                                             const aStyle = answerStyle[r.action];
                                             return (
                                                 <div key={m} className="rounded-lg border p-4" style={{ borderColor: LINE, backgroundColor: '#FAFAF7' }}>
@@ -1369,7 +1371,7 @@ const Accuracy: React.FC = () => {
                                                 style={{
                                                     width: isInView ? `${b.value}%` : '0%',
                                                     backgroundColor: b.color,
-                                                    opacity: b.baseline ? 0.7 : 1,
+                                                    opacity: 1,
                                                 }}
                                             />
                                         </div>
@@ -1404,7 +1406,7 @@ const Accuracy: React.FC = () => {
                                 {[0, 20, 40, 60, 80].map((g) => (
                                     <g key={g}>
                                         <line x1={padX} y1={yFor(g)} x2={W - padX} y2={yFor(g)} stroke="#F2F2EC" strokeWidth="1" />
-                                        <text x={padX - 8} y={yFor(g) + 3} fontSize="9.5" fill="#bcbcb4" textAnchor="end" fontFeatureSettings="'tnum'">{g}</text>
+                                        <text x={padX - 8} y={yFor(g) + 3} fontSize="9.5" fill="#bcbcb4" textAnchor="end" style={{ fontFeatureSettings: "'tnum'" }}>{g}</text>
                                     </g>
                                 ))}
                                 {/* bars */}
@@ -1435,7 +1437,7 @@ const Accuracy: React.FC = () => {
                                                 style={{ transition: 'all 1s ease' }}
                                             />
                                             {/* numeric label */}
-                                            <text x={cx} y={y - 10} textAnchor="middle" fontSize="13" fontWeight="700" fill="#111" fontFeatureSettings="'tnum'">
+                                            <text x={cx} y={y - 10} textAnchor="middle" fontSize="13" fontWeight="700" fill="#111" style={{ fontFeatureSettings: "'tnum'" }}>
                                                 {d.v}
                                                 <tspan fontSize="9" fontWeight="500" fill="#9a9a93" dx="1">%</tspan>
                                             </text>
